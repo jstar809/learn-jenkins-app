@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'mcr.microsoft.com/playwright:v1.39.0-noble'
+            image 'mcr.microsoft.com/playwright:v1.61.0-noble'
             reuseNode true
         }
     }
@@ -37,13 +37,12 @@ pipeline {
                 echo 'Start Playwright Test'
 
                 sh '''
-                    # serve 설치
                     npm install serve
 
-                    # build 폴더를 웹서버로 실행
+                    # React 서버 실행
                     node_modules/.bin/serve -s build -l 3000 &
 
-                    # 서버가 뜰 때까지 잠시 대기
+                    # 서버가 뜰 때까지 대기
                     sleep 5
 
                     # Playwright 실행
@@ -55,7 +54,8 @@ pipeline {
 
     post {
         always {
-            junit 'jest-results/junit.xml'
+            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            archiveArtifacts artifacts: 'test-results/**', allowEmptyArchive: true
         }
     }
 }
