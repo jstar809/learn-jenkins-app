@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Hello') {
             steps {
-                sh 'npm -v'
+                ehco "hello"
             }
         }
     }
